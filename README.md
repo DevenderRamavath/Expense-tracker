@@ -1,6 +1,6 @@
 # Expense Tracker
 
-A simple, responsive expense tracker built with HTML, CSS, and JavaScript.
+A simple, responsive expense tracker built with React and Vite.
 
 ## Features
 
@@ -13,10 +13,9 @@ A simple, responsive expense tracker built with HTML, CSS, and JavaScript.
 
 ## Run locally
 
-Open `index.html` directly in a browser, or start a local server:
-
 ```powershell
-python -m http.server 8000
+npm install
+npm run dev
 ```
 
-Then visit `http://localhost:8000`.
+Then open the local URL printed by Vite (usually `http://localhost:5173`).
