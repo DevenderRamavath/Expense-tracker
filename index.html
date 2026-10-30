@@ -39,6 +39,21 @@
           Amount
           <input id="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required>
         </label>
+        <label>
+          Category
+          <select id="category" required>
+            <option value="General">General</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Bills">Bills</option>
+            <option value="Salary">Salary</option>
+          </select>
+        </label>
+        <label>
+          Date
+          <input id="date" type="date" required>
+        </label>
         <fieldset>
           <legend>Type</legend>
           <label class="radio-option"><input type="radio" name="type" value="income" checked> Income</label>
@@ -50,7 +65,24 @@
       <section class="card history">
         <div class="history-heading">
           <h2>Transaction history</h2>
-          <button id="clear-all" class="text-button" type="button">Clear all</button>
+          <div class="history-actions">
+            <button id="export-csv" class="text-button" type="button">Export CSV</button>
+            <button id="clear-all" class="text-button" type="button">Clear all</button>
+          </div>
+        </div>
+        <div class="filters">
+          <label class="search-filter">
+            Search
+            <input id="search" type="search" placeholder="Description or category">
+          </label>
+          <label>
+            Type
+            <select id="filter-type">
+              <option value="all">All</option>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </label>
         </div>
         <ul id="transaction-list"></ul>
       </section>

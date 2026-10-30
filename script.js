@@ -6,8 +6,21 @@ const balanceElement = document.querySelector("#balance");
 const incomeElement = document.querySelector("#income");
 const expenseElement = document.querySelector("#expense");
 const clearAllButton = document.querySelector("#clear-all");
+const categoryInput = document.querySelector("#category");
+const dateInput = document.querySelector("#date");
+const searchInput = document.querySelector("#search");
+const typeFilter = document.querySelector("#filter-type");
+const exportButton = document.querySelector("#export-csv");
 
-let transactions = loadTransactions();
+let transactions = loadTransactions().map((transaction) => ({
+  ...transaction,
+  category: transaction.category || "General",
+  date: transaction.date || new Date().toISOString().slice(0, 10)
+}));
+
+const today = new Date().toISOString().slice(0, 10);
+dateInput.value = today;
+dateInput.max = today;
 
 function loadTransactions() {
   try {
@@ -41,18 +54,35 @@ function render() {
   incomeElement.textContent = formatCurrency(income);
   expenseElement.textContent = formatCurrency(expense);
 
-  if (transactions.length === 0) {
-    list.innerHTML = '<li class="empty">No transactions yet</li>';
+  const query = searchInput.value.trim().toLowerCase();
+  const selectedType = typeFilter.value;
+  const filteredTransactions = transactions.filter((transaction) => {
+    const matchesQuery = !query || transaction.description.toLowerCase().includes(query)
+      || transaction.category.toLowerCase().includes(query);
+    const matchesType = selectedType === "all" || transaction.type === selectedType;
+    return matchesQuery && matchesType;
+  });
+
+  if (filteredTransactions.length === 0) {
+    list.innerHTML = '<li class="empty">No matching transactions</li>';
     return;
   }
 
-  list.innerHTML = transactions.map((transaction) => `
+  list.innerHTML = filteredTransactions.map((transaction) => `
     <li class="transaction ${transaction.type}">
-      <span>${escapeHtml(transaction.description)}</span>
+      <span>
+        <strong>${escapeHtml(transaction.description)}</strong>
+        <small>${escapeHtml(transaction.category)} · ${formatDate(transaction.date)}</small>
+      </span>
       <strong class="amount">${transaction.type === "expense" ? "-" : "+"}${formatCurrency(transaction.amount)}</strong>
       <button class="delete-button" type="button" data-id="${transaction.id}" aria-label="Delete ${escapeHtml(transaction.description)}">✕</button>
     </li>
   `).join("");
+}
+
+function formatDate(date) {
+  return new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric" })
+    .format(new Date(`${date}T00:00:00`));
 }
 
 function escapeHtml(value) {
@@ -76,12 +106,15 @@ form.addEventListener("submit", (event) => {
     id: globalThis.crypto?.randomUUID?.() || String(Date.now()),
     description,
     amount,
-    type
+    type,
+    category: categoryInput.value,
+    date: dateInput.value
   });
 
   saveTransactions();
   render();
   form.reset();
+  dateInput.value = today;
   descriptionInput.focus();
 });
 
@@ -101,6 +134,26 @@ clearAllButton.addEventListener("click", () => {
   transactions = [];
   saveTransactions();
   render();
+});
+
+searchInput.addEventListener("input", render);
+typeFilter.addEventListener("change", render);
+
+exportButton.addEventListener("click", () => {
+  if (transactions.length === 0) return;
+
+  const rows = [
+    ["Date", "Description", "Category", "Type", "Amount"],
+    ...transactions.map(({ date, description, category, type, amount }) =>
+      [date, description, category, type, amount])
+  ];
+  const csv = rows.map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\n");
+  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "expense-transactions.csv";
+  link.click();
+  URL.revokeObjectURL(url);
 });
 
 render();
