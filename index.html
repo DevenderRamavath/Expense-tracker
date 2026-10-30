@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header>
+      <p class="eyebrow">Personal finance</p>
+      <h1>Expense Tracker</h1>
+    </header>
+
+    <section class="summary" aria-label="Expense summary">
+      <article>
+        <span>Total balance</span>
+        <strong id="balance">₹0.00</strong>
+      </article>
+      <article>
+        <span>Income</span>
+        <strong id="income">₹0.00</strong>
+      </article>
+      <article>
+        <span>Expenses</span>
+        <strong id="expense">₹0.00</strong>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <form id="transaction-form" class="card">
+        <h2>Add transaction</h2>
+        <label>
+          Description
+          <input id="description" type="text" placeholder="Salary, groceries..." required>
+        </label>
+        <label>
+          Amount
+          <input id="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required>
+        </label>
+        <fieldset>
+          <legend>Type</legend>
+          <label class="radio-option"><input type="radio" name="type" value="income" checked> Income</label>
+          <label class="radio-option"><input type="radio" name="type" value="expense"> Expense</label>
+        </fieldset>
+        <button type="submit">Add transaction</button>
+      </form>
+
+      <section class="card history">
+        <div class="history-heading">
+          <h2>Transaction history</h2>
+          <button id="clear-all" class="text-button" type="button">Clear all</button>
+        </div>
+        <ul id="transaction-list"></ul>
+      </section>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
