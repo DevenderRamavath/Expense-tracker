@@ -44,9 +44,9 @@ h2 { font-size: 1.1rem; margin: 0 0 18px; }
 .content-grid { display: grid; grid-template-columns: 340px 1fr; gap: 16px; }
 .card { padding: 22px; }
 form label { display: block; font-weight: 650; margin-bottom: 14px; }
-input[type="text"], input[type="number"] {
+input[type="text"], input[type="number"], input[type="date"], input[type="search"], select {
   width: 100%; border: 1px solid #d0d5dd; border-radius: 9px; padding: 11px 12px;
-  margin-top: 7px; font: inherit;
+  margin-top: 7px; font: inherit; background: #fff;
 }
 fieldset { border: 0; padding: 0; margin: 2px 0 18px; display: flex; gap: 12px; }
 legend { font-weight: 650; margin-bottom: 7px; }
@@ -58,13 +58,19 @@ form button {
 }
 
 .history-heading { display: flex; align-items: center; justify-content: space-between; }
+.history-actions { display: flex; gap: 10px; }
 .text-button { border: 0; background: transparent; color: #667085; }
+.filters { display: grid; grid-template-columns: 1fr 150px; gap: 12px; margin-bottom: 8px; }
+.filters label { color: #667085; font-size: .85rem; font-weight: 650; }
 #transaction-list { list-style: none; padding: 0; margin: 0; }
 .transaction {
   display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px;
   padding: 13px 0; border-top: 1px solid #eaecf0;
 }
 .transaction:first-child { border-top: 0; }
+.transaction span { min-width: 0; }
+.transaction span strong { display: block; }
+.transaction span small { display: block; color: #667085; margin-top: 3px; }
 .transaction.income .amount { color: #087a55; }
 .transaction.expense .amount { color: #c4320a; }
 .delete-button { border: 0; background: transparent; color: #98a2b3; font-size: 1rem; }
